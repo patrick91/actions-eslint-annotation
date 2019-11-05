@@ -49,7 +49,7 @@ function eslint() {
   const cli = new eslint.CLIEngine({
     extensions: [".jsx", ".js", ".tsx", ".ts"]
   });
-  const report = cli.executeOnFiles(["src/"]);
+  const report = cli.executeOnFiles(["."]);
 
   // fixableErrorCount, fixableWarningCount are available too
   const { results, errorCount, warningCount } = report;
