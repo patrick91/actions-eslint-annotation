@@ -1,0 +1,12 @@
+{
+  "name": "actions-eslint-annotation",
+  "version": "1.0.0",
+  "description": "Test for github actions",
+  "main": "index.js",
+  "repository": "git@github.com:patrick91/actions-eslint-annotation.git",
+  "author": "Patrick Arminio <patrick.arminio@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.6.0"
+  }
+}
