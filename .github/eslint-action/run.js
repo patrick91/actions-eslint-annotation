@@ -14,7 +14,7 @@ const {
 } = repository;
 const { name: repo } = repository;
 
-const checkName = "ESLint check";
+const checkName = "eslint";
 
 const headers = {
   "Content-Type": "application/json",
@@ -24,9 +24,13 @@ const headers = {
 };
 
 async function createCheck() {
+  console.log('🤞🤞🤞🤞🤞🤞🤞')
+  console.log(JSON.stringify(event, null, 4))
+  console.log(event.pull_request.head.sha)
+
   const body = {
     name: checkName,
-    head_sha: GITHUB_SHA,
+    head_sha: event.pull_request.head.sha,
     status: "in_progress",
     started_at: new Date()
   };
@@ -49,7 +53,7 @@ function eslint() {
   const cli = new eslint.CLIEngine({
     extensions: [".jsx", ".js", ".tsx", ".ts"]
   });
-  const report = cli.executeOnFiles(["src/"]);
+  const report = cli.executeOnFiles(["."]);
 
   // fixableErrorCount, fixableWarningCount are available too
   const { results, errorCount, warningCount } = report;
@@ -122,9 +126,7 @@ async function updateCheck(id, conclusion, output, annotations) {
     );
   });
 
-  console.log(requests);
-
-  await Promise.all(requests);
+  return await Promise.all(requests);
 }
 
 function exitWithError(err) {
@@ -140,9 +142,9 @@ async function run() {
   try {
     const { conclusion, output, annotations } = eslint();
 
-    await updateCheck(id, conclusion, output, annotations);
+    const results = await updateCheck(id, conclusion, output, annotations);
 
-    console.log("all is done");
+    console.log("all is done", results.map(result => result.statusCode));
 
     if (conclusion === "failure") {
       process.exit(78);
